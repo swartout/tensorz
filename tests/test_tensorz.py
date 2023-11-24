@@ -613,11 +613,11 @@ def test_mean_axis_backward():
 
     z_a = TensorZ(a)
     z_b = z_a.mean(axis=1)
-    z_b.backward()
+    z_b.sum().backward()
 
     t_a = torch.tensor(a, requires_grad=True)
     t_b = t_a.mean(axis=1)
-    t_b.backward()
+    t_b.sum().backward()
 
     assert np.allclose(z_a.grad, t_a.grad.numpy())
 
@@ -629,11 +629,11 @@ def test_mean_axis_fuzzy():
 
         z_a = TensorZ(a)
         z_b = z_a.mean(axis=1)
-        z_b.backward()
+        z_b.sum().backward()
 
         t_a = torch.tensor(a, requires_grad=True)
         t_b = t_a.mean(axis=1)
-        t_b.backward()
+        t_b.sum().backward()
 
         assert np.allclose(z_b.data, t_b.detach().numpy())
         assert np.allclose(z_a.grad, t_a.grad.numpy())
@@ -698,11 +698,11 @@ def test_sum_axis_backward():
     a = np.array([[2.0, 4.0, -1.0, 0], [1.0, 2.0, 3.0, 4.0]])
 
     z_a = TensorZ(a)
-    z_b = z_a.sum(axis=1)
+    z_b = z_a.sum(axis=1).mean()
     z_b.backward()
 
     t_a = torch.tensor(a, requires_grad=True)
-    t_b = t_a.sum(axis=1)
+    t_b = t_a.sum(axis=1).mean()
     t_b.backward()
 
     assert np.allclose(z_a.grad, t_a.grad.numpy())
@@ -714,11 +714,11 @@ def test_sum_axis_fuzzy():
         a = np.random.uniform(low=-100, high=100, size=(size, size))
 
         z_a = TensorZ(a)
-        z_b = z_a.sum(axis=1)
+        z_b = z_a.sum(axis=1).mean()
         z_b.backward()
 
         t_a = torch.tensor(a, requires_grad=True)
-        t_b = t_a.sum(axis=1)
+        t_b = t_a.sum(axis=1).mean()
         t_b.backward()
 
         assert np.allclose(z_b.data, t_b.detach().numpy())
