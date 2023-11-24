@@ -96,3 +96,19 @@ class TensorZ:
         out._backward = _backward
         return out
 
+
+    def __radd__(self, other: Union[float, int]) -> TensorZ:
+        return self + other
+
+    
+    def __rsub__(self, other: Union[float, int]) -> TensorZ:
+        return self - other
+
+
+    def __rmul__(self, other: Union[float, int]) -> TensorZ:
+        return self * other
+
+
+    def __rtruediv__(self, other: Union[float, int]) -> TensorZ:
+        return other * (self ** -1)
+
